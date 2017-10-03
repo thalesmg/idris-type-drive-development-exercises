@@ -60,7 +60,10 @@ parsePrefix SChar x = getChar (unpack x)
   where
     getChar : List Char -> Maybe (Char, String)
     getChar [] = Nothing
-    getChar (c::cs) = Just (c, ltrim (pack cs))
+    getChar (c::cs) = case cs of
+                        [] => Just (c, "")
+                        ' '::rest => Just(c, ltrim (pack rest))
+                        _ => Nothing
 parsePrefix (schm1 .+. schm2) x = do
   (res1, rest1) <- parsePrefix schm1 x
   (res2, rest2) <- parsePrefix schm2 rest1
